@@ -1,13 +1,13 @@
+
 <?php
 ?>
 <html>
     <head>
         <style>
         .news-link{
-            display: inline-block;
-            padding: 40px;
-            border:40px solid transparent;
-            border-image-source: url('border.png');
+          border-style:solid;
+          border-color:gray;
+          border: width 2px;;
         }
         </style>
     </head>
@@ -42,9 +42,12 @@
     $title = (string) $item->title;
     $link = (string) $item->link;
     // var_dump([$title, $link]);
+    if($title){
     ?>
     <a target="_blank" href="<?php echo $link;?>" class="news-link">
    <?php echo $title;?>
     </a></br>
     <?php
+    }
+
 }
