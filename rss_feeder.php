@@ -13,6 +13,7 @@
             border-width: 0px 0px 1px 0px;
             text-decoration: none;
         }
+
         .news-link:hover {
             color: lightblue;
         }
@@ -45,52 +46,95 @@
         }
     </style>
 </head>
-
-<body>
-    <?php
-function get_content($URL)
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_URL, $URL);
-    $data = curl_exec($ch);
-    curl_close($ch);
-    return $data;
-}
-// index array
-// associative array
-$rss_urls = [
-    'مهر' => 'https://www.mehrnews.com/rss',
-    'فارس' => 'https://www.farsnews.ir/rss',
-    'تسنیم' => 'https://www.tasnimnews.com/fa/rss/feed/0/8/0/',
-    'ایرنا' => 'https://www.irna.ir/rss',
-    'تابناک' => 'https://www.tabnak.ir/fa/rss/1',
-    'خبرفارسی' => 'https://khabarfarsi.com/rss/top',
-    // 'https://www.yjc.news/fa/rss/allnews',
-    'ایسنا' => 'https://www.isna.ir/rss',
-    'خبرآنلاین' => 'https://www.khabaronline.ir/rss',
-    'مشرق' => 'https://www.mashreghnews.ir/rss',
-];
-// foreach ($array as $key => $value)
-//{
-//}
-foreach ($rss_urls as $name => $rss_url) {
-    $obj = simplexml_load_file($rss_url);
-    $item = $obj->channel->item[0];
-    $title = (string) $item->title;
-    $link = (string) $item->link;
-    // var_dump([$title, $link]);
-    // $title (meghdar darad) == not false == true
-    // $title == '0'
-    if($title){
-?>
-    <a target="_blank" href="<?php echo $link; ?>" class="news-link">
-    <?php echo $title; ?>
-    </a> <span style="color: gray;"><?php echo $name;?></span></br>
 <?php
-    }
-}
+$cat = $_GET['cat'] ?? 0;
+define('CAT_GLOBAL', '0');
+define('CAT_SPORT', '1');
+$categories = [
+    CAT_GLOBAL => 'عمومی',
+    CAT_SPORT => 'ورزشی',
+];
 ?>
+<body>
+    <form action="" method="get">
+        <select name="cat">
+            <?php 
+            foreach ($categories as $key => $value) {
+            ?>
+            <option value="<?php echo $key;?>" <?php if($cat == $key){echo 'selected';}?>><?php echo $value;?></option>
+            <?php 
+            }
+            ?>
+        </select>
+        <button type="submit">بارگذاری خبر</button>
+    </form>
+    <?php
+    function get_content($URL)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+    // var_dump($_GET);
+    // var_dump($_REQUEST);
+    // index array
+    // associative array
+    // format 1:
+    // $cat = 0;
+    // if(array_key_exists('cat', $_GET)) {
+    //     $cat = $_GET['cat'];
+    // }
+    // format 2:
+    // $cat = array_key_exists('cat', $_GET) ? $_GET['cat'] : 0;
+    // format 3:
+    // $cat = 0;
+    // if(isset($_GET['cat'])) {
+    //     $cat = $_GET['cat'];
+    // }
+    
+    switch (intval($cat)) {
+        case CAT_GLOBAL: // omoumi
+            $rss_urls = [
+                'مهر' => 'https://www.mehrnews.com/rss',
+                'فارس' => 'https://www.farsnews.ir/rss',
+                // 'تسنیم' => 'https://www.tasnimnews.com/fa/rss/feed/0/8/0/',
+                // 'ایرنا' => 'https://www.irna.ir/rss',
+                // 'تابناک' => 'https://www.tabnak.ir/fa/rss/1',
+                // 'خبرفارسی' => 'https://khabarfarsi.com/rss/top',
+                // 'https://www.yjc.news/fa/rss/allnews',
+                // 'ایسنا' => 'https://www.isna.ir/rss',
+                // 'خبرآنلاین' => 'https://www.khabaronline.ir/rss',
+                // 'مشرق' => 'https://www.mashreghnews.ir/rss',
+            ];
+            break;
+        case CAT_SPORT: // varzeshi
+            $rss_urls = [
+                'فارس' => 'https://www.farsnews.ir/rss/sports',
+                'ایرنا' => 'https://www.irna.ir/rss/tp/14'
+            ];
+            break;
+    }
+
+    foreach ($rss_urls as $name => $rss_url) {
+        $obj = simplexml_load_file($rss_url);
+        $item = $obj->channel->item[0];
+        $title = (string) $item->title;
+        $link = (string) $item->link;
+        // var_dump([$title, $link]);
+        // $title (meghdar darad) == not false == true
+        // $title == '0'
+        if ($title) {
+    ?>
+            <a target="_blank" href="<?php echo $link; ?>" class="news-link">
+                <?php echo $title; ?>
+            </a> <span style="color: gray;"><?php echo $name; ?></span></br>
+    <?php
+        }
+    }
+    ?>
 
 </body>
 
