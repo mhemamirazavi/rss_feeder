@@ -47,11 +47,7 @@
 </head>
 
 <body>
-
-</body>
-
-</html>
-<?php
+    <?php
 function get_content($URL)
 {
     $ch = curl_init();
@@ -84,9 +80,16 @@ foreach ($rss_urls as $name => $rss_url) {
     $title = (string) $item->title;
     $link = (string) $item->link;
     // var_dump([$title, $link]);
+
 ?>
     <a target="_blank" href="<?php echo $link; ?>" class="news-link">
     <?php echo $title; ?>
     </a> <span style="color: gray;"><?php echo $name;?></span></br>
+
 <?php
 }
+?>
+
+</body>
+
+</html>
