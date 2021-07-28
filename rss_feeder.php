@@ -135,8 +135,6 @@ $categories = [
         }
     }
     ?>
-    <p>salam</p>
-
 </body>
 
 </html>
