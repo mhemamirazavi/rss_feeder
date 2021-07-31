@@ -44,15 +44,24 @@
                 url('./fonts/Vazir-Light.ttf') format('truetype');
             font-weight: 300;
         }
+       .pubdate {
+
+        font-size: 12px;
+        color: lightslategray;
+        }
     </style>
 </head>
 <?php
 $cat = $_GET['cat'] ?? 0;
 define('CAT_GLOBAL', '0');
 define('CAT_SPORT', '1');
+define('CAT_Political', '2');
+define('CAT_Economical','3')
 $categories = [
     CAT_GLOBAL => 'عمومی',
     CAT_SPORT => 'ورزشی',
+    CAT_Political =>'سیاسی',
+    CAT_Economical=>'اقتصادی'
 ];
 ?>
 <body>
@@ -102,7 +111,7 @@ $categories = [
                 'فارس' => 'https://www.farsnews.ir/rss',
                 // 'تسنیم' => 'https://www.tasnimnews.com/fa/rss/feed/0/8/0/',
                 // 'ایرنا' => 'https://www.irna.ir/rss',
-                // 'تابناک' => 'https://www.tabnak.ir/fa/rss/1',
+                //'تابناک' => 'https://www.tabnak.ir/fa/rss/1',
                 // 'خبرفارسی' => 'https://khabarfarsi.com/rss/top',
                 // 'https://www.yjc.news/fa/rss/allnews',
                 // 'ایسنا' => 'https://www.isna.ir/rss',
@@ -113,9 +122,26 @@ $categories = [
         case CAT_SPORT: // varzeshi
             $rss_urls = [
                 'فارس' => 'https://www.farsnews.ir/rss/sports',
-                'ایرنا' => 'https://www.irna.ir/rss/tp/14'
+                'ایرنا' => 'https://www.irna.ir/rss/tp/14',
+                'ایسنا' => 'https://www.isna.ir/rss/tp/24',
+                'خبرانلاین' => 'https://www.khabaronline.ir/rss/tp/6',
+                'خبر فارسی' => 'https://khabarfarsi.com/rss/category/2518',
+                'مشرق' => 'https://www.mashreghnews.ir/rss?pl=99',
+                '' => '',
+                '' => '',
             ];
             break;
+            case CAT_Political: //CIACI
+                $rss_urls = [
+                    'مشرق' => 'https://www.mashreghnews.ir/rss/tp/2',
+                    'خبرانلاین' => 'https://www.khabaronline.ir/rss/tp/1',
+                    'ایسنا' => 'https://www.isna.ir/rss/tp/14',
+                    'ایرنا' => 'https://www.irna.ir/rss/tp/5',
+                    'خبرفارسی' => 'https://khabarfarsi.com/rss/category/2470',
+                    'تابناک' => 'https://www.tabnak.ir/fa/rss/1/2',
+                    'فارس نیوز' => 'https://www.farsnews.ir/rss/politics',
+                ];
+                break;
     }
 
     foreach ($rss_urls as $name => $rss_url) {
@@ -123,6 +149,7 @@ $categories = [
         $item = $obj->channel->item[0];
         $title = (string) $item->title;
         $link = (string) $item->link;
+        echo '<span class="pubdate">'.$obj->channel->item->pubDate.'</span>';
         // var_dump([$title, $link]);
         // $title (meghdar darad) == not false == true
         // $title == '0'
