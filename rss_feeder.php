@@ -172,20 +172,23 @@ $categories = [
 <div class="m-3">
 <?php
     foreach ($rss_urls as $name => $rss_url) {
-        $obj = simplexml_load_file($rss_url);
+        $obj = @simplexml_load_file($rss_url);
+        if (!$obj) {
+            continue;
+        }
         $item = $obj->channel->item[0];
         $title = (string) $item->title;
         $link = (string) $item->link;
 
         $time = \Morilog\Jalali\CalendarUtils::strftime('l، Y/m/d H:i', strtotime($item->pubDate)); // 1395-02-19
         $time = \Morilog\Jalali\CalendarUtils::convertNumbers($time);
-        if ($title) {
+        
     ?>
             <a target="_blank" title="<?php echo $time; ?>" href="<?php echo $link; ?>" class="news-link">
                 <?php echo $title; ?>
             </a> <span style="color: gray;"><?php echo $name; ?></span></br>
     <?php
-        }
+        
     }
     ?>
     </div>
