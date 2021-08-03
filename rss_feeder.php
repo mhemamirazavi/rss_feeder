@@ -183,12 +183,12 @@ $categories = [
         $time = \Morilog\Jalali\CalendarUtils::strftime('l، Y/m/d H:i', strtotime($item->pubDate)); // 1395-02-19
         $time = \Morilog\Jalali\CalendarUtils::convertNumbers($time);
         $ago = \Morilog\Jalali\Jalalian::forge(strtotime($item->pubDate))->ago();
-        $ago = \Morilog\Jalali\CalendarUtils::convertNumbers($extra);
+        $ago = \Morilog\Jalali\CalendarUtils::convertNumbers($ago);
         
     ?>
-            <a target="_blank" title="<?php echo $time; echo $ago; ?>" href="<?php echo $link; ?>" class="news-link fs-2">
+            <a target="_blank" title="<?php echo $time; ?>" href="<?php echo $link; ?>" class="news-link fs-2">
                 <?php echo $title; ?>
-    </a><small class="text-muted fs-4"><?php echo $extra; ?> | <?php echo $name; ?></small></br>
+    </a><span class="text-muted fs-4"><?php echo $ago; ?> | <?php echo $name; ?></span></br>
     <?php
         
     }
